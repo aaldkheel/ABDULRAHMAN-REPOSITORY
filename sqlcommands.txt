@@ -1,0 +1,98 @@
+/* ch4 
+
+5  
+ 
+6  
+
+
+select account_number, account_description 
+from general_ledger_account outer join invoice_line_items using (invoice_line_items.ACCOUNT_NUMBER)
+order by  account_number; 
+
+
+7
+select vendor_name , vendor_state
+from VENDORS 
+where VENDOR_STATE = 'CA'
+union
+select VENDOR_NAME,  CASE when vendor_state != 'CA' then 'Outside_CA' end 
+from vendors
+where VENDORS.VENDOR_STATE != 'CA'
+
+order by vendor_name;
+
+
+/*CH5 
+1 
+
+select DISTINCT(vendor_id), sum(invoice_total) as total
+from INVOICES
+GROUP by VENDOR_ID; 
+
+2 
+select vendor_name,  sum(invoices.payment_total)as payment
+from  invoices, vendors 
+where vendors.VENDOR_ID= invoices.VENDOR_ID
+GROUP BY VENDOR_NAME
+order by payment desc; 
+
+3 
+select vendor_name , count(DISTINCT invoice_id) as Number_of_invoices , sum( invoice_total)
+from vendors join INVOICES using ( vendor_id)
+group by vendor_name
+order by Number_of_invoices desc;
+
+
+
+4 
+select  account_description , count(invoice_line_items.invoice_id) as entries
+, sum (line_item_atm) as total_line
+from GENERAL_LEDGER_ACCOUNTS , INVOICE_LINE_ITEMS
+
+where GENERAL_LEDGER_ACCOUNTS.ACCOUNT_NUMBER= INVOICE_LINE_ITEMS.ACCOUNT_NUMBER
+
+group by GENERAL_LEDGER_ACCOUNTS.ACCOUNT_DESCRIPTION 
+
+having entries > 1
+
+order by total_line desc ;
+
+5 
+
+select  account_description , count(invoice_line_items.invoice_id) as entries
+, sum (line_item_atm) as total_line
+from GENERAL_LEDGER_ACCOUNTS , INVOICE_LINE_ITEMS  join INVOICES using (INVOICES.INVOICE_ID) 
+
+where GENERAL_LEDGER_ACCOUNTS.ACCOUNT_NUMBER= INVOICE_LINE_ITEMS.ACCOUNT_NUMBER
+and invoices.invoices_date >= To_date('04-01-2014','mm-dd-yyyy') and invoices.invoices_date <= To_date('06-30-2014','mm-dd-yyyy')
+
+group by GENERAL_LEDGER_ACCOUNTS.ACCOUNT_DESCRIPTION 
+
+having entries > 1
+
+order by total_line desc ;
+
+
+7
+
+select vendor_name , count(distinct invoice_line_item.account_number)as acc
+from vendors,invoice_line_item, INVOICES
+where vendors.vendor_id=INVOICES.VENDOR_ID and INVOICES.INVOICE_ID=invoice_line_item.invoice_id
+group by vendor_name
+having acc> 1;
+
+
+CH6 
+
+1 
+select distinct vendor_name
+from vendors 
+where vendors.vendor_id in ( select vendor_id from invoices where vendors.vendor_id= invoices.vendor_id)
+
+order by vendor_name;
+
+
+
+
+*/
+

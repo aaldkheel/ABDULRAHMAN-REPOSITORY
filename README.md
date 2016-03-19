@@ -1,4 +1,5 @@
-# hello
+# Hello Everyone..
+
 Sample for initiating a new repository . 
 
 Here a breif description about the version control ..
